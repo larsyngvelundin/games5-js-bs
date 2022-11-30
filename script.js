@@ -88,6 +88,9 @@ function createEnemy(color) {
         //if (enemyBottom > bottom && enemyBottom < bottom + 150 && enemyLeft === left) {
         if (Math.abs(enemyBottom - bottom) < 25 && Math.abs(enemyLeft - left) < 25) {
             console.log("HERO HIT");
+            let dyingSound = new Audio("game-over-arcade-6435.mp3");
+            dyingSound.volume = 0.3;
+            dyingSound.play();
             hero.remove();
             messageElement.innerHTML = "You died";
             //clearInterval(move)
@@ -140,7 +143,10 @@ function createBullet() {
     //console.log(hero.style.width);
     //console.log(hero);
     let bulletLeft = left + 25;
-
+    
+    let shootingSound = new Audio("lazer-reverb-13090.mp3");
+    shootingSound.volume = 0.1;
+    shootingSound.play();
     console.log("bullet", bulletBottom);
     let posX = left;
     let posY = bottom;
@@ -199,6 +205,9 @@ function createBullet() {
             //console.log("left", Math.abs(tempLeft - bulletLeft));
             if (Math.abs(tempBottom - bulletBottom) < 25 && Math.abs(tempLeft - bulletLeft) < 25) {
                 console.log("BULLET HIT");
+                let boomSound = new Audio("boom.mp3");
+                boomSound.volume = 0.3;
+                boomSound.play();
                 currentAsteroids[i].remove();
                 addScore();
             }
