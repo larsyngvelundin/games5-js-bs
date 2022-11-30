@@ -6,17 +6,16 @@
 
 
 
-let hero = document.getElementById("hero");
+let hero = "";
 let game = document.getElementById("game");
 let score = document.getElementById("score");
 let messageElement = document.getElementById("message");
-let scoreValue = 0;
 
-let playerAlive = true;
+let playerAlive = false;
+let scoreValue = 0;
 let bottom = 0;
 let left = 50;
 let heroRotation = 0;
-
 let enemySpeed = -12;
 
 document.addEventListener("keydown", (e) => {
@@ -31,9 +30,14 @@ document.addEventListener("keydown", (e) => {
             break;
         case "s":
         case "ArrowDown":
-            console.log("vi ska gå ner");
-            bottom -= 10;
-            hero.style.bottom = bottom + "px"
+            if (playerAlive) {
+                console.log("vi ska gå ner");
+                bottom -= 10;
+                hero.style.bottom = bottom + "px"
+            }
+            else {
+                startGame();
+            }
             break;
         case "d":
         case "ArrowRight":
@@ -121,10 +125,10 @@ function createEnemy(color) {
 }
 
 
-createEnemy();
+//createEnemy();
 //createEnemyTwo();
-createEnemy();
-createEnemy();
+//createEnemy();
+//createEnemy();
 //createEnemy();
 
 
@@ -143,7 +147,7 @@ function createBullet() {
     //console.log(hero.style.width);
     //console.log(hero);
     let bulletLeft = left + 25;
-    
+
     let shootingSound = new Audio("lazer-reverb-13090.mp3");
     shootingSound.volume = 0.1;
     shootingSound.play();
@@ -224,4 +228,24 @@ function createBullet() {
 function addScore() {
     scoreValue++;
     score.innerHTML = "Score:" + scoreValue;
+}
+
+
+function startGame() {
+    playerAlive = true;
+    let playerElement = document.createElement("img");
+    playerElement.src = "img/superhero.png";
+    playerElement.classList.add("hero");
+    playerElement.id = "hero";
+    game.appendChild(playerElement);
+    hero = document.getElementById("hero");
+    
+    scoreValue = 0;
+    bottom = 0;
+    left = 50;
+    heroRotation = 0;
+    enemySpeed = -12;
+    createEnemy();
+    createEnemy();
+    createEnemy();
 }
