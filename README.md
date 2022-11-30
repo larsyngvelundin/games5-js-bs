@@ -1,6 +1,7 @@
 #BCU22
 #Blockkedje programmering, JS
-#Contributors:
+
+Contributors:
 - Liza
 - Lars
 - Carolin
