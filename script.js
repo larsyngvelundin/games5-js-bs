@@ -1,7 +1,23 @@
 //
 //
 //
-//
+
+let highscoreValue = 0;
+// kolla om highscore 'r sparat
+if(localStorage.getItem("highscore")){
+    //om det finns ladda in i highscoreValue
+    console.log("den finns");
+    console.log("LS Highscore",localStorage.getItem("highscore"));
+    highscoreValue = parseInt(localStorage.getItem("highscore"));
+    console.log("type",typeof(highscoreValue));
+}
+else{
+    //om inte skapa det och sätt till noll
+    localStorage.setItem("highscore", highscoreValue);
+    console.log("den finns inte");
+}
+
+
 
 
 
@@ -9,7 +25,10 @@
 let hero = "";
 let game = document.getElementById("game");
 let score = document.getElementById("score");
+let highscore = document.getElementById("highscore");
+highscore.innerHTML = "Highscore:" + highscoreValue;
 let messageElement = document.getElementById("message");
+messageElement.innerHTML = "Press S to start";
 
 let playerAlive = false;
 let scoreValue = 0;
@@ -65,6 +84,15 @@ document.addEventListener("keydown", (e) => {
 let enemyId = 0;
 let bulletId = 0;
 
+let gameUpdate = setInterval(() => {
+    if(playerAlive){
+        messageElement.style.display = "none";
+    }
+    else{
+        messageElement.style.display = "block";
+    }
+},100);
+
 function createEnemy(color) {
 
     enemyId++;
@@ -96,7 +124,18 @@ function createEnemy(color) {
             dyingSound.volume = 0.3;
             dyingSound.play();
             hero.remove();
-            messageElement.innerHTML = "You died";
+            messageElement.innerHTML = "You died<br>Press S to try again";
+            if (highscoreValue == scoreValue){
+                messageElement.innerHTML += "<br>NEW HIGHSCORE!";
+                localStorage.setItem("highscore", highscoreValue);
+            }
+
+            ////
+            ////LÄGG TILL HIGHCSORE I LS
+            ////
+
+
+
             //clearInterval(move)
             clearInterval(move)
             playerAlive = false;
@@ -113,25 +152,25 @@ function createEnemy(color) {
                 createEnemy();
             }
         }
+        if(enemy.classList.contains("remove")){
+            clearInterval(move)
+            enemy.remove();
+        }
 
     }, 60);
 
     function stopEnemy() {
         clearInterval(move);
-
     }
 
     game.appendChild(enemy)
 }
-
 
 //createEnemy();
 //createEnemyTwo();
 //createEnemy();
 //createEnemy();
 //createEnemy();
-
-
 
 function toRadians(angle) {
     return angle * (Math.PI / 180);
@@ -207,13 +246,16 @@ function createBullet() {
             let tempLeft = parseInt(currentAsteroids[i].style.left.slice(0, -2));
             //console.log("bottom", Math.abs(tempBottom - bulletBottom));
             //console.log("left", Math.abs(tempLeft - bulletLeft));
-            if (Math.abs(tempBottom - bulletBottom) < 25 && Math.abs(tempLeft - bulletLeft) < 25) {
+            if (Math.abs(tempBottom - bulletBottom) < 25 && 
+                Math.abs(tempLeft - bulletLeft) < 25) {
                 console.log("BULLET HIT");
                 let boomSound = new Audio("boom.mp3");
                 boomSound.volume = 0.3;
                 boomSound.play();
-                currentAsteroids[i].remove();
+                currentAsteroids[i].classList.add("remove");
                 addScore();
+                clearInterval(move);
+                bullet.remove();
             }
         }
 
@@ -224,12 +266,14 @@ function createBullet() {
     game.appendChild(bullet)
 }
 
-
 function addScore() {
     scoreValue++;
+    if(scoreValue > highscoreValue){
+        highscoreValue = scoreValue;
+    }
     score.innerHTML = "Score:" + scoreValue;
+    highscore.innerHTML = "Highscore:" + highscoreValue;
 }
-
 
 function startGame() {
     playerAlive = true;
@@ -241,6 +285,7 @@ function startGame() {
     hero = document.getElementById("hero");
     
     scoreValue = 0;
+    score.innerHTML = "Score:" + scoreValue;
     bottom = 0;
     left = 50;
     heroRotation = 0;

@@ -8,6 +8,9 @@
     <title>Document</title>
     <script src="script.js" defer></script>
     <style>
+        body{
+            overflow: hidden;
+        }
         #hero {
 
 
@@ -50,15 +53,28 @@
             left: 50px;
             border-radius: 4px;
         }
+
+        #startScreen, #message{
+            position: absolute;
+            text-align: center;
+            top:50%;
+            left:50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+        }
+        #score, #highscore{
+            
+            font-size: 3em;
+        }
     </style>
 
 </head>
 
 <body>
     <div id="score">Score:0</div>
+    <div id="highscore">Highscore:0</div>
     <div id="message"></div>
     <div id="game">
-
 </body>
 
 </html>
